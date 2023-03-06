@@ -1,8 +1,12 @@
 import { FastifyInstance } from "fastify";
-import { todoListCodec } from "../codecs/todo";
-import { getTodos } from "../controllers/todoController";
+import { todoCodec, todoListCodec } from "../codecs/todo";
+import { getTodoController } from "../controllers/todoController";
+import { getTodoService } from "../services/todoService";
 
 export const todoRoutes = (server: FastifyInstance) => {
+  const todoService = getTodoService(server.log);
+  const todoController = getTodoController(todoService);
+
   server.get(
     "/",
     {
@@ -12,7 +16,26 @@ export const todoRoutes = (server: FastifyInstance) => {
         },
       },
     },
-    getTodos
+    todoController.getTodos
   );
+
+  server.get(
+    "/:id",
+    {
+      schema: {
+        params: {
+          type: "object",
+          properties: {
+            id: { type: "number" },
+          },
+        },
+        response: {
+          200: todoCodec.schema(),
+        },
+      },
+    },
+    todoController.getTodoById
+  );
+
   return server;
 };
