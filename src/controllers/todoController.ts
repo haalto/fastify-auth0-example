@@ -23,7 +23,10 @@ export const getTodoController = (todoService: TodoService) => {
         res.internalServerError();
       })
       .map((todo) =>
-        todo.isJust() ? res.send(todo.extract()) : res.notFound()
+        todo.caseOf({
+          Just: (todo) => res.send(todo),
+          Nothing: () => res.notFound(),
+        })
       );
   };
   return { getTodos, getTodoById };
