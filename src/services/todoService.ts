@@ -5,12 +5,12 @@ import { FastifyBaseLogger } from "fastify";
 import { Just, Maybe, Nothing, Right } from "purify-ts";
 import { get } from "../utils/http";
 
-export interface TodoService {
+interface TodoService {
   listTodos: () => EitherAsync<unknown, Todo[]>;
-  getTodoById: (id: number) => EitherAsync<unknown, Maybe<Todo>>;
+  findTodoById: (id: number) => EitherAsync<unknown, Maybe<Todo>>;
 }
 
-export const getTodoService = (logger: FastifyBaseLogger): TodoService => {
+const getTodoService = (logger: FastifyBaseLogger): TodoService => {
   const listTodos = () => {
     logger.info("Fetching todos");
     return get(`https://jsonplaceholder.typicode.com/todos`)
@@ -21,7 +21,7 @@ export const getTodoService = (logger: FastifyBaseLogger): TodoService => {
       .join();
   };
 
-  const getTodoById = (id: number) => {
+  const findTodoById = (id: number) => {
     logger.info("Fetching todo");
     return get(`https://jsonplaceholder.typicode.com/todos/${id}`)
       .map((response) => {
@@ -34,5 +34,7 @@ export const getTodoService = (logger: FastifyBaseLogger): TodoService => {
       .join();
   };
 
-  return { listTodos, getTodoById };
+  return { listTodos, findTodoById };
 };
+
+export { TodoService, getTodoService };

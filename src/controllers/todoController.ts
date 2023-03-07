@@ -16,7 +16,7 @@ export const getTodoController = (todoService: TodoService) => {
     req: FastifyRequest<{ Params: { id: number } }>,
     res: FastifyReply
   ) => {
-    const todo = await todoService.getTodoById(req.params.id);
+    const todo = await todoService.findTodoById(req.params.id);
     todo
       .mapLeft((error) => {
         req.log.error(error);
