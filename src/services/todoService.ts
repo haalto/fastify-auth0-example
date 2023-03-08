@@ -13,7 +13,6 @@ interface TodoService {
 
 const getTodoService = (logger: FastifyBaseLogger): TodoService => {
   const logError = logAndReturnError(logger);
-
   const listTodos = () => {
     logger.info("Fetching todos");
     return get(`https://jsonplaceholder.typicode.com/todos`)
