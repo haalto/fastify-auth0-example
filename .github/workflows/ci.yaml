@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  CI: true
+  NODE_ENV: ci
+
 jobs:
   build:
     runs-on: ubuntu-latest
