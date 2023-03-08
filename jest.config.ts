@@ -17,6 +17,7 @@ export default {
   clearMocks: true,
   preset: "ts-jest",
   testEnvironment: "node",
+  testMatch: ["**/test/**/*.test.ts", "**/src/**/*.test.ts"],
 
   // Indicates whether the coverage information should be collected while executing the test
   collectCoverage: true,
@@ -85,7 +86,7 @@ export default {
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
-    "^~(.*)$": "<rootDir>/src/$1",
+    "^/src/(.*)$": "<rootDir>/src/$1",
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
