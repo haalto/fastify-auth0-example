@@ -9,6 +9,7 @@
     "strictPropertyInitialization": false,
     "sourceMap": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "typeRoots": ["./node_modules/@types", "./src/@types"]
   }
 }

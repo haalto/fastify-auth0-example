@@ -1,16 +1,18 @@
 import { app } from "../../src/app";
-import { EitherAsync, Just, Nothing } from "purify-ts";
+import { EitherAsync, Just } from "purify-ts";
 import { getTodoService, TodoService } from "../../src/services/todoService";
+import { config } from "../setup";
 
 jest.mock("../../src/services/todoService");
+
+// Mock verify middleware
+jest.mock("../../src/auth/verify", () => ({
+  verify: jest.fn().mockImplementation((req, res, next) => next()),
+}));
 
 const mGetTodoService = jest.mocked(getTodoService);
 
 describe("Todo routes", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   const mTodoService: TodoService = {
     listTodos: jest
       .fn()
@@ -32,7 +34,7 @@ describe("Todo routes", () => {
   mGetTodoService.mockReturnValue(mTodoService);
 
   it("should return all todos", async () => {
-    const testApp = app({ logger: true });
+    const testApp = app(config, { logger: true });
 
     const res = await testApp.inject({
       method: "GET",
@@ -45,11 +47,14 @@ describe("Todo routes", () => {
   });
 
   it("should return a todo by id", async () => {
-    const testApp = app({ logger: true });
+    const testApp = app(config, { logger: true });
 
     const res = await testApp.inject({
       method: "GET",
       url: "/api/todos/1",
+      headers: {
+        authorization: "Bearer test",
+      },
     });
 
     expect(res.statusCode).toBe(200);
